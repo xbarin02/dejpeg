@@ -301,7 +301,6 @@ int main(int argc, char *argv[])
 	}
 
 	parameters.DWTtype = 0;
-	parameters.S = 16;
 
 	dprint (("[DEBUG] transform...\n"));
 

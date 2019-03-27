@@ -1,6 +1,6 @@
-CFLAGS=-std=c89 -pedantic -Wall -Wextra -Wconversion -ftrapv -Wfloat-equal -g -march=native -O3 $(EXTRA_CFLAGS)
+CFLAGS=-std=c89 -pedantic -Wall -Wextra -Wconversion -ftrapv -g -march=native -O3 -D_POSIX_C_SOURCE=200809L $(EXTRA_CFLAGS)
 LDFLAGS=-g -rdynamic $(EXTRA_LDFLAGS)
-LDLIBS=$(EXTRA_LDLIBS)
+LDLIBS=-lm $(EXTRA_LDLIBS)
 
 BIN=denoise
 
