@@ -646,7 +646,7 @@ static int frame_cmp(const struct frame *frameA, const struct frame *frameB)
 
 int frame_dump_mse(const struct frame *frameA, const struct frame *frameB)
 {
-	size_t height, width;
+	size_t height, width, stride;
 	size_t y, x;
 	int *dataA, *dataB;
 	double mse;
@@ -661,6 +661,7 @@ int frame_dump_mse(const struct frame *frameA, const struct frame *frameB)
 
 	height = frameA->height;
 	width = frameA->width;
+	stride = ceil_multiple8(frameA->width);
 
 	dataA = frameA->data;
 	dataB = frameB->data;
@@ -672,8 +673,8 @@ int frame_dump_mse(const struct frame *frameA, const struct frame *frameB)
 
 	for (y = 0; y < height; ++y) {
 		for (x = 0; x < width; ++x) {
-			int pixA = dataA[y*width + x];
-			int pixB = dataB[y*width + x];
+			int pixA = dataA[y*stride + x];
+			int pixB = dataB[y*stride + x];
 			int e;
 
 			if ( (pixA < 0 && pixB > INT_MAX + pixA)
@@ -696,18 +697,6 @@ int frame_dump_mse(const struct frame *frameA, const struct frame *frameB)
 
 	dprint (("[INFO] mse = %f\n", mse));
 
-	/*
-	 * The following code computes the PSNR which seems to be a bit
-	 * unnecessary for a quick comparison. Moreover, it requires linking
-	 * against -lm.
-	 */
-#if 0
-	maxval = convert_bpp_to_maxval(frameA->bpp);
-
-	psnr = 10. * log10( (double)maxval * (double)maxval / mse );
-
-	dprint (("[INFO] psnr = %f dB\n", psnr));
-#endif
 	return RET_SUCCESS;
 }
 
