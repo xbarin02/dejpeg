@@ -711,6 +711,65 @@ int frame_dump_mse(const struct frame *frameA, const struct frame *frameB)
 	return RET_SUCCESS;
 }
 
+static size_t size_min(size_t a, size_t b)
+{
+	return a > b ? b : a;
+}
+
+static size_t size_max(size_t a, size_t b)
+{
+	return a < b ? b : a;
+}
+
+float frame_get_mse(const struct frame *frameA, const struct frame *frameB, size_t bpp)
+{
+	size_t width, height;
+	size_t y, x;
+	size_t frameA_bpp, frameB_bpp, max_bpp;
+	size_t strideA, strideB;
+	int *frameA_data, *frameB_data;
+	float se = 0.f;
+
+	dprint (("[DEBUG] target bpp = %lu\n", (unsigned long) bpp));
+
+	assert( frameA );
+	assert( frameB );
+
+	strideA = ceil_multiple8(frameA->width);
+	strideB = ceil_multiple8(frameB->width);
+
+	frameA_data = frameA->data;
+	frameB_data = frameB->data;
+	frameA_bpp = frameA->bpp;
+	frameB_bpp = frameB->bpp;
+	max_bpp = size_max(frameA->bpp, frameB->bpp);
+	width = size_min(frameA->width, frameB->width);
+	height = size_min(frameA->height, frameB->height);
+
+	assert( max_bpp >= bpp && bpp > 0 );
+
+	assert( frameA_data );
+	assert( frameB_data );
+
+	for (y = 0; y < height; ++y) {
+		for (x = 0; x < width; ++x) {
+			int pixelA = frameA_data[y*strideA + x] << (max_bpp - frameA_bpp);
+			int pixelB = frameB_data[y*strideB + x] << (max_bpp - frameB_bpp);
+
+			int error = abs_(pixelA - pixelB) >> (max_bpp - bpp);
+
+			se += (float) error * (float) error;
+		}
+	}
+
+	se /= (float) width;
+	se /= (float) height;
+
+	dprint (("[DEBUG] mse = %f\n", se));
+
+	return se;
+}
+
 int frame_diff(struct frame *frame, const struct frame *frameA, const struct frame *frameB)
 {
 	size_t height, width;

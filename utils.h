@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <math.h>
 
 /* FIXME */
 #pragma GCC diagnostic ignored "-Wunused-function"
@@ -224,6 +225,13 @@ static size_t convert_bpp_to_depth(size_t bpp)
 	return bpp <= CHAR_BIT ? 1
 		: ( bpp <= CHAR_BIT * sizeof(short) ? sizeof(short)
 			: 0);
+}
+
+static float convert_mse_to_psnr(float mse, size_t bpp)
+{
+	unsigned long maxval = convert_bpp_to_maxval(bpp);
+
+	return 10.f * log10f( (float) maxval * (float) maxval / mse );
 }
 
 /**
