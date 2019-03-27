@@ -265,6 +265,8 @@ int main(int argc, char *argv[])
 {
 	struct frame frame, input_frame;
 	struct parameters parameters;
+	float mse;
+	float psnr;
 
 	assert( ~-1 == 0 );
 	assert( -1 >> 1 == -1 );
@@ -328,10 +330,10 @@ int main(int argc, char *argv[])
 
 	frame_dump(&frame, "decoded.pgm", 1);
 
-	if (frame_dump_mse(&frame, &input_frame)) {
-		fprintf(stderr, "[DEBUG] unable to compute MSE\n");
-		return EXIT_FAILURE;
-	}
+	mse = frame_get_mse(&frame, &input_frame, frame.bpp);
+	psnr = convert_mse_to_psnr(mse, frame.bpp);
+
+	fprintf(stderr, "[DEBUG] psnr = %f\n", psnr);
 
 	/** (1) save output image */
 
