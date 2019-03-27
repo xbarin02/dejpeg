@@ -263,7 +263,7 @@ void denoise(struct frame *frame)
 
 int main(int argc, char *argv[])
 {
-	struct frame frame, input_frame;
+	struct frame frame, original;
 	struct parameters parameters;
 	float mse;
 	float psnr;
@@ -271,7 +271,7 @@ int main(int argc, char *argv[])
 	assert( ~-1 == 0 );
 	assert( -1 >> 1 == -1 );
 
-	if (argc < 2) {
+	if (argc < 3) {
 		fprintf(stderr, "[ERROR] argument expected\n");
 		return EXIT_FAILURE;
 	}
@@ -281,6 +281,11 @@ int main(int argc, char *argv[])
 	dprint (("[DEBUG] loading...\n"));
 
 	if ( frame_load_pgm(&frame, argv[1]) ) {
+		fprintf(stderr, "[ERROR] unable to load image\n");
+		return EXIT_FAILURE;
+	}
+
+	if ( frame_load_pgm(&original, argv[2]) ) {
 		fprintf(stderr, "[ERROR] unable to load image\n");
 		return EXIT_FAILURE;
 	}
@@ -297,11 +302,6 @@ int main(int argc, char *argv[])
 
 	frame_dump(&frame, "input.pgm", 1);
 
-	if (frame_clone(&frame, &input_frame)) {
-		fprintf(stderr, "[ERROR] unable to clone the frame\n");
-		return EXIT_FAILURE;
-	}
-
 	parameters.DWTtype = 0;
 
 	dprint (("[DEBUG] transform...\n"));
@@ -315,9 +315,9 @@ int main(int argc, char *argv[])
 	dprint (("[DEBUG] dump...\n"));
 
 	frame_dump_chunked_as_semiplanar(&frame, "dwt3.pgm", 1);
-
+#if 1
 	denoise(&frame);
-
+#endif
 	frame_dump_chunked_as_semiplanar(&frame, "dwt3-denoised.pgm", 1);
 
 	dprint (("[DEBUG] inverse transform...\n"));
@@ -330,7 +330,7 @@ int main(int argc, char *argv[])
 
 	frame_dump(&frame, "decoded.pgm", 1);
 
-	mse = frame_get_mse(&frame, &input_frame, frame.bpp);
+	mse = frame_get_mse(&frame, &original, frame.bpp);
 	psnr = convert_mse_to_psnr(mse, frame.bpp);
 
 	fprintf(stderr, "[DEBUG] psnr = %f\n", psnr);
@@ -348,7 +348,7 @@ int main(int argc, char *argv[])
 
 	frame_destroy(&frame);
 
-	frame_destroy(&input_frame);
+	frame_destroy(&original);
 
 	return EXIT_SUCCESS;
 }
