@@ -16,6 +16,7 @@ struct view {
 };
 
 /* NOTE: některé koeficienty jsou záporné, ale dump znaménko ignoruje */
+/* TODO is_max by měl zohlednit, jestli obě maxima mají souhlasná znaménka */
 int is_max(int *this, size_t stride, size_t half_size)
 {
 	int *other;
@@ -28,7 +29,7 @@ int is_max(int *this, size_t stride, size_t half_size)
 			goto next;
 	}
 
-	return 1;
+	return +1;
 
 	next:
 
@@ -38,7 +39,15 @@ int is_max(int *this, size_t stride, size_t half_size)
 			return 0;
 	}
 
-	return 1;
+	return -1;
+}
+
+int is_double_max(int *this, size_t stride, size_t half_size, size_t block_distance)
+{
+	int max0 = is_max(this, stride, half_size);
+	int max1 = is_max(this+block_distance*stride, stride, half_size);
+
+	return max0 && !(max1 - max0);
 }
 
 void filter1(int *this, size_t stride, size_t half_size, size_t block_distance, int threshold)
@@ -46,7 +55,11 @@ void filter1(int *this, size_t stride, size_t half_size, size_t block_distance, 
 	if (*this > threshold)
 		return;
 
+#if 0
 	if (is_max(this, stride, half_size) && is_max(this+block_distance*stride, stride, half_size))
+#else
+	if (is_double_max(this, stride, half_size, block_distance))
+#endif
 		*this = 0;
 }
 
@@ -55,8 +68,13 @@ void filter2(int *this, size_t stride_x, size_t stride_y, size_t half_size, size
 	if (*this > threshold)
 		return;
 
+#if 0
 	if ( is_max(this, stride_x, half_size) && is_max(this+block_distance*stride_x, stride_x, half_size) &&
 	     is_max(this, stride_y, half_size) && is_max(this+block_distance*stride_y, stride_y, half_size) ) {
+#else
+	if (is_double_max(this, stride_x, half_size, block_distance) &&
+	    is_double_max(this, stride_y, half_size, block_distance)) {
+#endif
 		*this = 0;
 	}
 }
