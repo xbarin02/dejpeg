@@ -47,13 +47,19 @@ int is_double_max(int *this, size_t stride, size_t half_size, size_t block_dista
 	int max0 = is_max(this, stride, half_size);
 	int max1 = is_max(this+block_distance*stride, stride, half_size);
 
-	return max0 && !(max1 - max0);
+#if 0
+	return max0 && (max1 == max0);
+#else
+	return max0 && max1;
+#endif
 }
 
 void filter1(int *this, size_t stride, size_t half_size, size_t block_distance, int threshold)
 {
+#if 1
 	if (*this > threshold)
 		return;
+#endif
 
 #if 0
 	if (is_max(this, stride, half_size) && is_max(this+block_distance*stride, stride, half_size))
@@ -65,8 +71,10 @@ void filter1(int *this, size_t stride, size_t half_size, size_t block_distance, 
 
 void filter2(int *this, size_t stride_x, size_t stride_y, size_t half_size, size_t block_distance, int threshold)
 {
+#if 1
 	if (*this > threshold)
 		return;
+#endif
 
 #if 0
 	if ( is_max(this, stride_x, half_size) && is_max(this+block_distance*stride_x, stride_x, half_size) &&
