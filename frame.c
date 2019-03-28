@@ -457,6 +457,7 @@ int frame_dump(const struct frame *frame, const char *path, int factor)
 			int sample = data [y*width + x];
 			int magnitude = abs_(sample) / factor;
 			/* int magnitude = 128 + sample / factor; */
+			/* int magnitude = ( abs_(sample) / factor < 2 ? 127 :( sample > 0 ? 255 : 0 )); */
 
 			switch (depth) {
 				case sizeof(char): {

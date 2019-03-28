@@ -15,8 +15,6 @@ struct view {
 	size_t width, height;
 };
 
-/* NOTE: některé koeficienty jsou záporné, ale dump znaménko ignoruje */
-/* TODO is_max by měl zohlednit, jestli obě maxima mají souhlasná znaménka */
 int is_max(int *this, size_t stride, size_t half_size)
 {
 	int *other;
