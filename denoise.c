@@ -55,7 +55,7 @@ int is_double_max(int *this, size_t stride, size_t half_size, size_t block_dista
 void filter1(int *this, size_t stride, size_t half_size, size_t block_distance, int threshold)
 {
 #if 1
-	if (*this > threshold)
+	if (abs_(*this) > threshold)
 		return;
 #endif
 
@@ -66,7 +66,7 @@ void filter1(int *this, size_t stride, size_t half_size, size_t block_distance, 
 void filter2(int *this, size_t stride_x, size_t stride_y, size_t half_size, size_t block_distance, int threshold)
 {
 #if 1
-	if (*this > threshold)
+	if (abs_(*this) > threshold)
 		return;
 #endif
 
