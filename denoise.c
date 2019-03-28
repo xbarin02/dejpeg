@@ -59,11 +59,7 @@ void filter1(int *this, size_t stride, size_t half_size, size_t block_distance, 
 		return;
 #endif
 
-#if 0
-	if (is_max(this, stride, half_size) && is_max(this+block_distance*stride, stride, half_size))
-#else
 	if (is_double_max(this, stride, half_size, block_distance))
-#endif
 		*this = 0;
 }
 
@@ -74,13 +70,8 @@ void filter2(int *this, size_t stride_x, size_t stride_y, size_t half_size, size
 		return;
 #endif
 
-#if 0
-	if ( is_max(this, stride_x, half_size) && is_max(this+block_distance*stride_x, stride_x, half_size) &&
-	     is_max(this, stride_y, half_size) && is_max(this+block_distance*stride_y, stride_y, half_size) ) {
-#else
 	if (is_double_max(this, stride_x, half_size, block_distance) &&
 	    is_double_max(this, stride_y, half_size, block_distance)) {
-#endif
 		*this = 0;
 	}
 }
