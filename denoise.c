@@ -315,7 +315,7 @@ int main(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 
-	frame_dump(&frame, "input.pgm", 1);
+	frame_save_pgm(&frame, "input.pgm");
 
 	parameters.DWTtype = 0;
 

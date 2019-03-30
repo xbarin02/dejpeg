@@ -6,6 +6,7 @@
 #include <limits.h>
 #include <ctype.h>
 #include <assert.h>
+#include <math.h>
 
 int frame_write_pgm_header(const struct frame *frame, FILE *stream)
 {
@@ -405,6 +406,11 @@ int frame_load_pgm(struct frame *frame, const char *path)
 	return RET_SUCCESS;
 }
 
+static int log_(int n)
+{
+	return floor_( log((double)n + 1.) / log(10.) * 100.);
+}
+
 int frame_dump(const struct frame *frame, const char *path, int factor)
 {
 	FILE *stream;
@@ -455,7 +461,7 @@ int frame_dump(const struct frame *frame, const char *path, int factor)
 	for (y = 0; y < height; ++y) {
 		for (x = 0; x < width; ++x) {
 			int sample = data [y*width + x];
-			int magnitude = abs_(sample) / factor;
+			int magnitude = log_(abs_(sample) / factor);
 			/* int magnitude = 128 + sample / factor; */
 			/* int magnitude = ( abs_(sample) / factor < 2 ? 127 :( sample > 0 ? 255 : 0 )); */
 
