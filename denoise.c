@@ -21,6 +21,7 @@ int is_max(int *this, size_t stride, size_t half_size)
 	int *begin = this - half_size*stride;
 	int *end = this + half_size*stride;
 
+#if 1
 	/* suppose *this > others */
 	for (other = begin; other <= end; other += stride) {
 		if (*other > *this)
@@ -38,6 +39,15 @@ int is_max(int *this, size_t stride, size_t half_size)
 	}
 
 	return -1;
+#else
+	/* suppose |*this| > |others| */
+	for (other = begin; other <= end; other += stride) {
+		if (abs_(*other) > abs_(*this))
+			return 0;
+	}
+
+	return 1;
+#endif
 }
 
 int is_double_max(int *this, size_t stride, size_t half_size, size_t block_distance)
