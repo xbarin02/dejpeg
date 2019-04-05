@@ -18,8 +18,8 @@ struct view {
 int is_max(int *this, size_t stride, size_t half_size)
 {
 	int *other;
-	int *begin = this - half_size*stride;
-	int *end = this + half_size*stride;
+	int *begin = this - half_size * stride;
+	int *end = this + half_size * stride;
 
 #if 1
 	/* suppose *this > others */
@@ -53,7 +53,7 @@ int is_max(int *this, size_t stride, size_t half_size)
 int is_double_max(int *this, size_t stride, size_t half_size, size_t block_distance)
 {
 	int max0 = is_max(this, stride, half_size);
-	int max1 = is_max(this+block_distance*stride, stride, half_size);
+	int max1 = is_max(this + block_distance * stride, stride, half_size);
 
 	return max0 && max1;
 }
@@ -65,8 +65,9 @@ void filter1(int *this, size_t stride, size_t half_size, size_t block_distance, 
 		return;
 #endif
 
-	if (is_double_max(this, stride, half_size, block_distance))
+	if (is_double_max(this, stride, half_size, block_distance)) {
 		*this = 0;
+	}
 }
 
 void filter2(int *this, size_t stride_x, size_t stride_y, size_t half_size, size_t block_distance, int threshold)
@@ -272,7 +273,7 @@ void denoise(struct frame *frame)
 		view.height = height/2;
 		denoise_lh1band(&view, 4, 16);
 
-		/* TODO HH1 */
+		/* HH1 */
 		view.data = data + (1)*width + (1);
 		view.stride_x = 2;
 		view.stride_y = 2*width;
