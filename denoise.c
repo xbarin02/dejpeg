@@ -55,11 +55,7 @@ int is_double_max(int *this, size_t stride, size_t half_size, size_t block_dista
 	int max0 = is_max(this, stride, half_size);
 	int max1 = is_max(this+block_distance*stride, stride, half_size);
 
-#if 0
-	return max0 && (max1 == max0);
-#else
 	return max0 && max1;
-#endif
 }
 
 void filter1(int *this, size_t stride, size_t half_size, size_t block_distance, int threshold)
