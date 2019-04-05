@@ -58,11 +58,24 @@ int is_double_max(int *this, size_t stride, size_t half_size, size_t block_dista
 	return max0 && max1;
 }
 
+int sign(int n)
+{
+	if (n > 0)
+		return +1;
+	if (n < 0)
+		return -1;
+	return 0;
+}
+
 void filter1(int *this, size_t stride, size_t half_size, size_t block_distance, int threshold)
 {
 #if 1
-	if (abs_(*this) > threshold)
+	if (abs_(*this) > threshold) {
+#	if 1
+		*this = sign(*this) * ( abs_(*this) - threshold );
+#	endif
 		return;
+	}
 #endif
 
 	if (is_double_max(this, stride, half_size, block_distance)) {
@@ -73,8 +86,12 @@ void filter1(int *this, size_t stride, size_t half_size, size_t block_distance, 
 void filter2(int *this, size_t stride_x, size_t stride_y, size_t half_size, size_t block_distance, int threshold)
 {
 #if 1
-	if (abs_(*this) > threshold)
+	if (abs_(*this) > threshold) {
+#	if 1
+		*this = sign(*this) * ( abs_(*this) - threshold );
+#	endif
 		return;
+	}
 #endif
 
 	if (is_double_max(this, stride_x, half_size, block_distance) &&
