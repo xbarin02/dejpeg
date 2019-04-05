@@ -71,7 +71,7 @@ void filter1(int *this, size_t stride, size_t half_size, size_t block_distance, 
 {
 #if 1
 	if (abs_(*this) > threshold) {
-#	if 1
+#	if 0
 		*this = sign(*this) * ( abs_(*this) - threshold );
 #	endif
 		return;
@@ -87,7 +87,7 @@ void filter2(int *this, size_t stride_x, size_t stride_y, size_t half_size, size
 {
 #if 1
 	if (abs_(*this) > threshold) {
-#	if 1
+#	if 0
 		*this = sign(*this) * ( abs_(*this) - threshold );
 #	endif
 		return;
