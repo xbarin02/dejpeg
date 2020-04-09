@@ -1,6 +1,6 @@
 # dejpeg
 
-Experimental JPEG deblocker.
+Experimental JPEG deblocker based on the discrete wavelet transform.
 
 ### Sample input
 ![input](https://raw.githubusercontent.com/xbarin02/dejpeg/master/sample/input.png)
