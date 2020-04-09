@@ -2,10 +2,10 @@
 
 Experimental JPEG deblocker.
 
-Sample input:
+### Sample input
 ![input](https://raw.githubusercontent.com/xbarin02/dejpeg/master/sample/input.png)
 
-Sample output:
+### Sample output
 ![output](https://raw.githubusercontent.com/xbarin02/dejpeg/master/sample/output.png)
 
 ### Current status
